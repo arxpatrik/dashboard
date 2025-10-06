@@ -3,3 +3,4 @@ pandas
 sqlalchemy
 pytz
 psycopg2-binary
+streamlit_autorefresh
