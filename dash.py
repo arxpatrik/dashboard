@@ -221,8 +221,8 @@ def criar_card_html(row):
             <div class="card-text" title="{numero_cliente}"><strong>Cliente:</strong> {numero_cliente}</div>
             <div class="card-text" title="{agente}"><strong>Agente:</strong> {agente}</div>
             <div class="card-text" title="{ultima_msg}"><strong>Últ. Msg:</strong> {ultima_msg}</div>
-            <h4  class="card-title" title="{departamento_display}">{departamento_display}</h4>
             <div class="card-text" title="{data_formatada}"><strong>Criado em: </strong>{data_formatada}</div>
+            <h4  class="card-title" title="{departamento_display}">{departamento_display}</h4>
         </div>
         
         <div class="card-footer">
