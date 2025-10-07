@@ -216,7 +216,7 @@ def criar_primeira_linha_somente_iguais(df_matches, colunas_por_linha=6):
 #=====================================================#
 
 # Atualiza automaticamente a cada 1 segundo (1000 ms)
-st_autorefresh(interval=1000, key="atualizacao_painel")
+st_autorefresh(interval=10000, key="atualizacao_painel")
 
 fuso_horario_local = pytz.timezone('America/Sao_Paulo')
 COLUNAS_POR_LINHA = 6
