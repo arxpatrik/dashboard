@@ -11,6 +11,8 @@ import pytz
 from streamlit_autorefresh import st_autorefresh
 
 st.set_page_config(layout="wide")
+params = st.query_params
+
 
 #=================================================#
 # ======== CONFIGURAÇÕES DEPARTAMENTOS ===========#
@@ -114,29 +116,40 @@ def carregar_dados(limit=100):
 # =========== BLOCO DE FILTROS =========#
 #=======================================#
 
+
 df_inicial = carregar_dados(limit=100)
 
+# --- Opções iniciais baseadas no banco ---
 empresas = df_inicial['empresa'].dropna().unique().tolist()
 departamentos_opcoes = DEPARTAMENTOS_PADRAO
 mensagem_opcoes = df_inicial['ultima_mensagem_nome'].dropna().unique().tolist()
 
-# Inicializa session_state
+# --- Parâmetros da URL ---
+params = st.query_params
+
+# --- Carregar filtros da URL (se existirem) ---
+empresas_url = params.get_all("empresa") or empresas
+departamentos_url = params.get_all("departamento") or departamentos_opcoes
+mensagens_url = params.get_all("mensagem") or mensagem_opcoes
+
+# --- Garantir coerência no session_state ---
 if 'empresas_selecionadas' not in st.session_state:
-    st.session_state.empresas_selecionadas = empresas
+    st.session_state.empresas_selecionadas = empresas_url
 
 if 'departamentos_selecionados' not in st.session_state:
-    st.session_state.departamentos_selecionados = departamentos_opcoes
+    st.session_state.departamentos_selecionados = departamentos_url
 
 if 'mensagem_selecionadas' not in st.session_state:
-    st.session_state.mensagem_selecionadas = mensagem_opcoes.copy()
+    st.session_state.mensagem_selecionadas = mensagens_url
 else:
-    # Remove valores que não existem mais nas opções
+    # Limpa opções antigas que não existem mais
     st.session_state.mensagem_selecionadas = [
         m for m in st.session_state.mensagem_selecionadas if m in mensagem_opcoes
     ]
 
 st.sidebar.header("Filtros")
 
+# --- Garantir que apenas valores válidos permaneçam ---
 st.session_state.empresas_selecionadas = [
     e for e in st.session_state.empresas_selecionadas if e in empresas
 ]
@@ -147,6 +160,7 @@ st.session_state.mensagem_selecionadas = [
     m for m in st.session_state.mensagem_selecionadas if m in mensagem_opcoes
 ]
 
+# --- Filtros na barra lateral ---
 st.sidebar.multiselect(
     'Filtro Associado | Sistema',
     options=sorted(mensagem_opcoes),
@@ -168,6 +182,15 @@ st.sidebar.multiselect(
     default=st.session_state.departamentos_selecionados
 )
 
+# --- Atualiza os parâmetros da URL conforme filtros ---
+st.query_params.clear()
+st.query_params.update({
+    "empresa": st.session_state.empresas_selecionadas,
+    "departamento": st.session_state.departamentos_selecionados,
+    "mensagem": st.session_state.mensagem_selecionadas,
+})
+
+# --- Placeholder do conteúdo dinâmico ---
 placeholder = st.empty()
 
 #=====================================================#
