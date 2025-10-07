@@ -25,6 +25,7 @@ DEPARTAMENTOS_PADRAO = [
     "Cadastro",
     "Troca Periféricos",
     "Ouvidoria",
+    "Juridico",
 ]
 
 DEPARTAMENTO_MAP = {
@@ -44,7 +45,8 @@ DEPARTAMENTO_MAP = {
     'Analista de Cadastro': 'Cadastro',
     'Troca Perifericos': 'Troca Periféricos',
     'Ouvidoria': 'Ouvidoria',
-}
+    'Jurídico': 'Juridico'
+    }
 
 #=================================#
 # ======== CSS dos cards =========#
@@ -116,15 +118,45 @@ df_inicial = carregar_dados(limit=100)
 
 empresas = df_inicial['empresa'].dropna().unique().tolist()
 departamentos_opcoes = DEPARTAMENTOS_PADRAO
+mensagem_opcoes = df_inicial['ultima_mensagem_nome'].dropna().unique().tolist()
 
+# Inicializa session_state
 if 'empresas_selecionadas' not in st.session_state:
     st.session_state.empresas_selecionadas = empresas
+
 if 'departamentos_selecionados' not in st.session_state:
     st.session_state.departamentos_selecionados = departamentos_opcoes
 
+if 'mensagem_selecionadas' not in st.session_state:
+    st.session_state.mensagem_selecionadas = mensagem_opcoes.copy()
+else:
+    # Remove valores que não existem mais nas opções
+    st.session_state.mensagem_selecionadas = [
+        m for m in st.session_state.mensagem_selecionadas if m in mensagem_opcoes
+    ]
+
 st.sidebar.header("Filtros")
-st.sidebar.multiselect("Filtrar por Empresa:", options=sorted(empresas), key='empresas_selecionadas', default=st.session_state.empresas_selecionadas)
-st.sidebar.multiselect("Filtrar por Departamento:", options=sorted(departamentos_opcoes), key='departamentos_selecionados', default=st.session_state.departamentos_selecionados)
+
+st.sidebar.multiselect(
+    'Filtro Associado | Sistema',
+    options=sorted(mensagem_opcoes),
+    key='mensagem_selecionadas',
+    default=st.session_state.mensagem_selecionadas
+)
+
+st.sidebar.multiselect(
+    "Filtrar por Empresa:",
+    options=sorted(empresas),
+    key='empresas_selecionadas',
+    default=st.session_state.empresas_selecionadas
+)
+
+st.sidebar.multiselect(
+    "Filtrar por Departamento:",
+    options=sorted(departamentos_opcoes),
+    key='departamentos_selecionados',
+    default=st.session_state.departamentos_selecionados
+)
 
 placeholder = st.empty()
 
@@ -232,7 +264,7 @@ else:
     df_filtrado = df_filtrado[df_filtrado['empresa'].isin(st.session_state.empresas_selecionadas)]
     df_filtrado = df_filtrado[df_filtrado['departamento_agente_padrao'].isin(st.session_state.departamentos_selecionados)]
     df_filtrado['nome_agente'] = df_filtrado['nome_agente'].fillna('').astype(str)
-    df_filtrado['ultima_mensagem_nome'] = df_filtrado['ultima_mensagem_nome'].fillna('').astype(str)
+    df_filtrado = df_filtrado[df_filtrado['ultima_mensagem_nome'].isin(st.session_state.mensagem_selecionadas)]
     
     with placeholder.container():
         st.subheader("Painel de Atendimentos Ativos")
