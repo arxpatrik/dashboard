@@ -164,9 +164,7 @@ def criar_card_html(row):
     minutos_decorridos = row.tempo_desde_msg / 60 if pd.notnull(row.tempo_desde_msg) else 0
     tempo_display = formatar_tempo_hhmmss(row.tempo_desde_msg if pd.notnull(row.tempo_desde_msg) else 0)
     
-    if minutos_decorridos > 59: 
-        cor_fundo, cor_texto = "#FF00BB", "white" # Rosa
-    elif minutos_decorridos > 5: 
+    if minutos_decorridos > 5: 
         cor_fundo, cor_texto = "#d62728", "white" # Vermelho
     elif minutos_decorridos > 3: 
         cor_fundo, cor_texto = "#ffdd57", "black" # Amarelo
