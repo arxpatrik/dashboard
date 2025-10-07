@@ -137,6 +137,16 @@ else:
 
 st.sidebar.header("Filtros")
 
+st.session_state.empresas_selecionadas = [
+    e for e in st.session_state.empresas_selecionadas if e in empresas
+]
+st.session_state.departamentos_selecionados = [
+    d for d in st.session_state.departamentos_selecionados if d in departamentos_opcoes
+]
+st.session_state.mensagem_selecionadas = [
+    m for m in st.session_state.mensagem_selecionadas if m in mensagem_opcoes
+]
+
 st.sidebar.multiselect(
     'Filtro Associado | Sistema',
     options=sorted(mensagem_opcoes),
