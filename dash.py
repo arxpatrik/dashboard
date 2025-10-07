@@ -81,7 +81,7 @@ st.html("""
 # ======== Conexão com o Banco =========#
 #=======================================#
 
-engine = create_engine("postgresql+psycopg2://postgres:postgres123@localhost:5432/sistema")
+engine = create_engine("postgresql+psycopg2://postgres:postgres123@192.168.1.62:5432/sistema")
 
 #===================================================#
 # ======== FUNÇÃO DE CARREGAMENTO DE DADOS =========#
