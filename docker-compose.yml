@@ -8,7 +8,6 @@ services:
     restart: always
     volumes:
       - dashboard_data:/app/data 
-      - ./app:/app
 
 volumes:
   dashboard_data:
