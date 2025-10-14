@@ -28,10 +28,13 @@ DEPARTAMENTOS_PADRAO = [
     "Troca Periféricos",
     "Ouvidoria",
     "Juridico",
+    "Regulagem",
 ]
 
 DEPARTAMENTO_MAP = {
+    'Regulagem': 'Regulagem',
     'Atendimento': 'Atendimento',
+    'Regulador Eventos': 'Regulagem',
     'Analista de Cobrança': 'Analista de Cobrança',
     'Analista de cobranca': 'Analista de Cobrança',
     'Cobranca': 'Analista de Cobrança',
