@@ -28,10 +28,13 @@ DEPARTAMENTOS_PADRAO = [
     "Troca Periféricos",
     "Ouvidoria",
     "Juridico",
+    "Regulagem",
 ]
 
 DEPARTAMENTO_MAP = {
+    'Regulagem': 'Regulagem',
     'Atendimento': 'Atendimento',
+    'Regulador Eventos': 'Regulagem',
     'Analista de Cobrança': 'Analista de Cobrança',
     'Analista de cobranca': 'Analista de Cobrança',
     'Cobranca': 'Analista de Cobrança',
@@ -139,13 +142,13 @@ if 'empresas_selecionadas' not in st.session_state:
 if 'departamentos_selecionados' not in st.session_state:
     st.session_state.departamentos_selecionados = departamentos_url
 
-if 'mensagem_selecionadas' not in st.session_state:
-    st.session_state.mensagem_selecionadas = mensagens_url
-else:
-    # Limpa opções antigas que não existem mais
-    st.session_state.mensagem_selecionadas = [
-        m for m in st.session_state.mensagem_selecionadas if m in mensagem_opcoes
-    ]
+#if 'mensagem_selecionadas' not in st.session_state:
+#    st.session_state.mensagem_selecionadas = mensagens_url
+#else:
+#    # Limpa opções antigas que não existem mais
+#    st.session_state.mensagem_selecionadas = [
+#        m for m in st.session_state.mensagem_selecionadas if m in mensagem_opcoes
+#    ]
 
 st.sidebar.header("Filtros")
 
@@ -156,17 +159,17 @@ st.session_state.empresas_selecionadas = [
 st.session_state.departamentos_selecionados = [
     d for d in st.session_state.departamentos_selecionados if d in departamentos_opcoes
 ]
-st.session_state.mensagem_selecionadas = [
-    m for m in st.session_state.mensagem_selecionadas if m in mensagem_opcoes
-]
+#st.session_state.mensagem_selecionadas = [
+#    m for m in st.session_state.mensagem_selecionadas if m in mensagem_opcoes
+#]
 
 # --- Filtros na barra lateral ---
-st.sidebar.multiselect(
-    'Filtro Associado | Sistema',
-    options=sorted(mensagem_opcoes),
-    key='mensagem_selecionadas',
-    default=st.session_state.mensagem_selecionadas
-)
+#st.sidebar.multiselect(
+#    'Filtro Associado | Sistema',
+#    options=sorted(mensagem_opcoes),
+#    key='mensagem_selecionadas',
+#    default=st.session_state.mensagem_selecionadas
+#)
 
 st.sidebar.multiselect(
     "Filtrar por Empresa:",
@@ -187,7 +190,7 @@ st.query_params.clear()
 st.query_params.update({
     "empresa": st.session_state.empresas_selecionadas,
     "departamento": st.session_state.departamentos_selecionados,
-    "mensagem": st.session_state.mensagem_selecionadas,
+    #"mensagem": st.session_state.mensagem_selecionadas,
 })
 
 # --- Placeholder do conteúdo dinâmico ---
@@ -280,7 +283,7 @@ def criar_primeira_linha_somente_iguais(df_matches, colunas_por_linha=6):
 # ======== ATUALIZAÇÃO AUTOMÁTICA ===================#
 #=====================================================#
 
-# Atualiza automaticamente a cada 10 segundos (10000 ms)
+# Atualiza automaticamente a cada 3 segundos (30000 ms)
 st_autorefresh(interval=3000, key="atualizacao_painel")
 
 fuso_horario_local = pytz.timezone('America/Sao_Paulo')
@@ -297,7 +300,7 @@ else:
     df_filtrado = df_filtrado[df_filtrado['empresa'].isin(st.session_state.empresas_selecionadas)]
     df_filtrado = df_filtrado[df_filtrado['departamento_agente_padrao'].isin(st.session_state.departamentos_selecionados)]
     df_filtrado['nome_agente'] = df_filtrado['nome_agente'].fillna('').astype(str)
-    df_filtrado = df_filtrado[df_filtrado['ultima_mensagem_nome'].isin(st.session_state.mensagem_selecionadas)]
+    #df_filtrado = df_filtrado[df_filtrado['ultima_mensagem_nome'].isin(st.session_state.mensagem_selecionadas)]
     
     with placeholder.container():
         st.subheader("Painel de Atendimentos Ativos")
